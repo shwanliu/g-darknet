@@ -376,7 +376,11 @@ void forward_yolo_layer(const layer l, network net)
                 tot_iou_loss += 1 - all_ious.iou;
                 // range is -1 <= giou <= 1
                 tot_giou += all_ious.giou;
-                tot_giou_loss += 1 - all_ious.giou;
+                // 原本的loss
+                //tot_giou_loss += 1 - all_ious.giou;
+                // 取对数的los
+                tot_giou_loss += (1 - all_ious.giou)*exp(- all_ious.giou);
+
 
                 int obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
                 avg_obj += l.output[obj_index];
