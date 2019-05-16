@@ -51,7 +51,7 @@ typedef enum{
 } ACTIVATION;
 
 typedef enum{
-    IOU, GIOU, MSE
+    IOU, GIOU, MSE, expGIOU
 } IOU_LOSS;
 
 typedef enum{

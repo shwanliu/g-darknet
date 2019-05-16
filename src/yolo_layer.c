@@ -296,8 +296,10 @@ void forward_yolo_layer(const layer l, network net)
     if(!net.train) return;
     float tot_iou = 0;
     float tot_giou = 0;
+    float exp_giou =0 ;
     float tot_iou_loss = 0;
     float tot_giou_loss = 0;
+    float exp_giou_loss = 0;
     float recall = 0;
     float recall75 = 0;
     float avg_cat = 0;
@@ -376,10 +378,11 @@ void forward_yolo_layer(const layer l, network net)
                 tot_iou_loss += 1 - all_ious.iou;
                 // range is -1 <= giou <= 1
                 tot_giou += all_ious.giou;
+                exp_giou += exp(-all_ious.giou);
                 // 原本的loss
-                //tot_giou_loss += 1 - all_ious.giou;
-                // 取对数的los
-                tot_giou_loss += (1 - all_ious.giou)*exp(- all_ious.giou);
+                tot_giou_loss += 1 - all_ious.giou;
+                // 取指数的loss
+                exp_giou_loss += (1 - all_ious.giou)*exp(- all_ious.giou);
 
 
                 int obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
@@ -424,7 +427,9 @@ void forward_yolo_layer(const layer l, network net)
     // gIOU loss + MSE (objectness) loss
     if (l.iou_loss == MSE ) {
       *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    } else {
+    } else if(l.iou_loss == expGIOU){
+        avg_iou_loss = count > 0 ? l.iou_normalizer * (exp_giou_loss / count) : 0;
+    }else {
       if (l.iou_loss == GIOU) {
         avg_iou_loss = count > 0 ? l.iou_normalizer * (tot_giou_loss / count) : 0;
       } else {
@@ -435,7 +440,7 @@ void forward_yolo_layer(const layer l, network net)
 //#ifdef DEBUG_PRINTS
 //    printf("iou_loss: %f, iou_loss_count: %d, avg_iou_loss: %f, classification_loss: %f, total_cost: %f\n", iou_loss, count, avg_iou_loss, classification_loss, *(l.cost));
 //#endif
-    printf("v3 (%s loss, Normalizer: (iou: %f, cls: %f) Region %d Avg (IOU: %f, GIOU: %f), Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f, count: %d\n", (l.iou_loss==MSE?"mse":(l.iou_loss==GIOU?"giou":"iou")), l.iou_normalizer, l.cls_normalizer, net.index, tot_iou/count, tot_giou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, recall75/count, count);
+    printf("v3 (%s loss, Normalizer: (iou: %f, cls: %f) Region %d Avg (IOU: %f, GIOU: %f, exp_GIOU: %f), Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f, count: %d\n", (l.iou_loss==MSE?"mse":(l.iou_loss==expGIOU?"expGiou":(l.iou_loss==GIOU?"giou":"iou"))), l.iou_normalizer, l.cls_normalizer, net.index, tot_iou/count, tot_giou/count,exp_giou/count,avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, recall75/count, count);
     if (count > 0 && strlen(net.logfile) != 0) {
       log_avg_iou(net.logfile, tot_iou, tot_giou, count, avg_iou_loss, classification_loss, *(l.cost));
     }
