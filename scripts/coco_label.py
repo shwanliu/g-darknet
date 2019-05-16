@@ -38,7 +38,9 @@ def convert_annotation():
         outfile = open('/home/shawnliu/workPlace/expG-darknet/coco/coco_label/%s.txt'%(file_name[:-4]), 'a+')
         for item2 in value:
             category_id = item2['category_id']
-            value1 = filter(lambda item3: item3['id'] == category_id,data['categories'])
+            value1 = list(filter(lambda item3: item3['id'] == category_id,data['categories']))
+            print(type(value1))
+            #print(type(value1[0]))
             name = value1[0]['name']
             class_id = classes.index(name)
             box = item2['bbox']
