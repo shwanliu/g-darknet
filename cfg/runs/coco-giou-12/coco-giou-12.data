@@ -1,9 +1,9 @@
 classes= 80
-train = /scr/ntsoi/darknet/datasets/coco/coco/trainvalno5k.txt
+train = /home/shawnliu/workPlace/expG-darknet/coco/train2017.txt
 # for submission
 #valid = datasets/coco/coco/test2014.txt
 # for validation
-valid = datasets/coco/coco/coco_val_5k.txt
+valid = /home/shawnliu/workPlace/expG-darknet/coco/val2017.txt
 names = data/coco.names
 backup = backup
 prefix = coco-giou-12

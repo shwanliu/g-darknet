@@ -49,4 +49,9 @@ def convert_annotation():
         outfile.close()
 
 if __name__ == '__main__':
-    convert_annotation()
+    #convert_annotation()
+    file_dir="/home/shawnliu/workPlace/expG-darknet/coco/images/train2017/"
+    list_file = open('/home/shawnliu/workPlace/expG-darknet/coco/train2017.txt', 'w')
+    for root, dirs, files in os.walk(file_dir): 
+        for file in files: 
+            list_file.write(str(file_dir)+str(file)+'\n')
