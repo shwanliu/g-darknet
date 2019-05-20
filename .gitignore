@@ -6,6 +6,7 @@
 *.jpg
 *.pyc
 old/
+backup/
 mnist/
 data/
 caffe/
@@ -14,6 +15,8 @@ images/
 opencv/
 convnet/
 decaf/
+lib/
+coco/
 submission/
 darknet
 .fuse*
