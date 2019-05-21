@@ -6,6 +6,6 @@ train = /home/shawnliu/workPlace/expG-darknet/coco/train2017.txt
 valid = /home/shawnliu/workPlace/expG-darknet/coco/val2017.txt
 names = data/coco.names
 backup = backup
-prefix = coco-giou-12
+prefix = coco-exp_giou-12
 eval = coco
 

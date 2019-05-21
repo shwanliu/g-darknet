@@ -323,7 +323,7 @@ dxrep dx_box_iou(box pred, box truth, IOU_LOSS iou_loss) {
       p_dr = ((U * dI_wrt_r) - (I * dU_wrt_r)) / (U * U);
     }
 
-    if (iou_loss == GIOU) {
+    if (iou_loss == GIOU || iou_loss == expGIOU) {
       if (C > 0) {
         // apply "C" term from gIOU
         p_dt += ((C * dU_wrt_t) - (U * dC_wrt_t)) / (C * C);

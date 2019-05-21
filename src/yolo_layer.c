@@ -429,19 +429,28 @@ void forward_yolo_layer(const layer l, network net)
       *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
     } else if(l.iou_loss == expGIOU){
         avg_iou_loss = count > 0 ? l.iou_normalizer * (exp_giou_loss / count) : 0;
-        printf("avg_iou_loss %f",avg_iou_loss);
-    }else {
+        *(l.cost) = avg_iou_loss + classification_loss;
+      }else {
       if (l.iou_loss == GIOU) {
         avg_iou_loss = count > 0 ? l.iou_normalizer * (tot_giou_loss / count) : 0;
       } else {
         avg_iou_loss = count > 0 ? l.iou_normalizer * (tot_iou_loss / count) : 0;
       }
       *(l.cost) = avg_iou_loss + classification_loss;
+      //printf("l.cost: %f",*(l.cost));
     }
 //#ifdef DEBUG_PRINTS
 //    printf("iou_loss: %f, iou_loss_count: %d, avg_iou_loss: %f, classification_loss: %f, total_cost: %f\n", iou_loss, count, avg_iou_loss, classification_loss, *(l.cost));
 //#endif
+    printf(" \n");
     printf("v3 (%s loss, Normalizer: (iou: %f, cls: %f) Region %d Avg (IOU: %f, GIOU: %f, exp_GIOU: %f), Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f, count: %d\n", (l.iou_loss==MSE?"mse":(l.iou_loss==expGIOU?"expGiou":(l.iou_loss==GIOU?"giou":"iou"))), l.iou_normalizer, l.cls_normalizer, net.index, tot_iou/count, tot_giou/count,exp_giou/count,avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, recall75/count, count);
+    printf("loss of avg_iou_loss + classification_loss= %f \n",*(l.cost));
+    //printf("avg_iou_loss: %f \n",avg_iou_loss);
+    printf("iou loss: %f \n",avg_iou_loss = count > 0 ? l.iou_normalizer * (tot_iou_loss / count) : 0);
+    printf("giou loss: %f \n",count > 0 ? l.iou_normalizer * (tot_giou_loss / count) : 0);
+    printf("expGiou loss: %f \n",count > 0 ? l.iou_normalizer * (exp_giou_loss / count) : 0);
+    printf("classification_loss: %f \n",classification_loss);
+
     if (count > 0 && strlen(net.logfile) != 0) {
       log_avg_iou(net.logfile, tot_iou, tot_giou, count, avg_iou_loss, classification_loss, *(l.cost));
     }

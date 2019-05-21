@@ -261,7 +261,9 @@ void calc_network_cost(network *netp)
     float sum = 0;
     int count = 0;
     for(i = 0; i < net.n; ++i){
+	//printf("net.layers[%d].cost: %f ; ",i, net.layers[i].cost);
         if(net.layers[i].cost){
+            //printf("net.layers[%d].cost: %f ; ",i, net.layers[i].cost);
             sum += net.layers[i].cost[0];
             ++count;
         }
