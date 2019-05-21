@@ -5,6 +5,7 @@
 *.png
 *.jpg
 *.pyc
+results/
 old/
 backup/
 mnist/

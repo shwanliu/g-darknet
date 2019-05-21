@@ -24,6 +24,14 @@ def convert(size,box):
     y = box[1]*dh
     w = box[2]*dw
     h = box[3]*dh
+    if x<=0:
+        x = x + 0.0000000001
+    if y<=0:
+        y = y + 0.0000000001
+    if w<=0:
+        w = w + 0.0000000001
+    if h<=0:
+        h = h + 0.0000000001
     return (x,y,w,h)
 
 def convert_annotation():
@@ -35,12 +43,10 @@ def convert_annotation():
         width = item['width']
         height = item['height']
         value = filter(lambda item1: item1['image_id'] == image_id,data['annotations'])
-        outfile = open('/home/shawnliu/workPlace/expG-darknet/coco/coco_label/%s.txt'%(file_name[:-4]), 'a+')
+        outfile = open('/home/shawnliu/workPlace/expG-darknet/coco/new_label/%s.txt'%(file_name[:-4]), 'a+')
         for item2 in value:
             category_id = item2['category_id']
             value1 = list(filter(lambda item3: item3['id'] == category_id,data['categories']))
-            print(type(value1))
-            #print(type(value1[0]))
             name = value1[0]['name']
             class_id = classes.index(name)
             box = item2['bbox']
@@ -49,7 +55,7 @@ def convert_annotation():
         outfile.close()
 
 if __name__ == '__main__':
-    #convert_annotation()
+    convert_annotation()
     file_dir="/home/shawnliu/workPlace/expG-darknet/coco/images/train2017/"
     list_file = open('/home/shawnliu/workPlace/expG-darknet/coco/train2017.txt', 'w')
     for root, dirs, files in os.walk(file_dir): 

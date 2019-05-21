@@ -16,10 +16,10 @@ annType = ['segm','bbox','keypoints']
 # bounding boxes
 annType = annType[1]      #specify type here
 prefix = 'person_keypoints' if annType=='keypoints' else 'instances'
-print 'Running demo for *%s* results.'%(annType)
+print ('Running demo for *%s* results.'%(annType))
 
 #initialize COCO ground truth api
-dataDir='datasets/coco/coco'
+dataDir='coco'
 
 # all instance files:
 #instances_val2014.json
@@ -27,10 +27,10 @@ dataDir='datasets/coco/coco'
 #instances_val2017.json
 #instances_train2017.json
 
-dataType='minival2014'
+#dataType='minival2014'
 #dataType='val2014'
 #dataType='train2014'
-#dataType='val2017'
+dataType='val2017'
 #dataType='train2014'
 annFile = '%s/annotations/%s_%s.json'%(dataDir,prefix,dataType)
 print("loading gt {}".format(annFile))
@@ -42,8 +42,9 @@ cocoGt=COCO(annFile)
 #resFile = resFile%(dataDir, prefix, dataType, annType)
 # real results
 #resFile = 'results/coco_results_coco-giou-12/402008/val2017/coco_results.json'
-resFile = 'results/coco_results.pretrained-608.2014val5k.json'
+#resFile = 'results/coco_results.pretrained-608.2014val5k.json'
 #resFile = 'results/coco_results.json'
+resFile = 'results/coco-giou-12/coco_results.json'
 print("loading predicted {}".format(resFile))
 #resFile = 'results/coco_results.json.score_gt_0_8.valid2014.pretty.json'
 cocoDt=cocoGt.loadRes(resFile)
