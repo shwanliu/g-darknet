@@ -429,6 +429,7 @@ void forward_yolo_layer(const layer l, network net)
       *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
     } else if(l.iou_loss == expGIOU){
         avg_iou_loss = count > 0 ? l.iou_normalizer * (exp_giou_loss / count) : 0;
+        printf("avg_iou_loss %f",avg_iou_loss);
     }else {
       if (l.iou_loss == GIOU) {
         avg_iou_loss = count > 0 ? l.iou_normalizer * (tot_giou_loss / count) : 0;

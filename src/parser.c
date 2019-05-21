@@ -328,7 +328,10 @@ layer parse_yolo(list *options, size_params params)
       if (strcmp(iou_loss, "giou")==0) {
         printf("loss is set to GIOU\n");
         l.iou_loss = GIOU;
-      } else {
+      } else if(strcmp(iou_loss,"expGiou")==0){
+	printf("loss is set to expGIOU\n");
+	l.iou_loss = expGIOU;
+      }else {
         printf("loss is set to IOU\n");
         l.iou_loss = IOU;
       }
@@ -342,7 +345,7 @@ layer parse_yolo(list *options, size_params params)
       printf("representation is set to REP_EXP\n");
       l.representation = REP_EXP;
     }
-    fprintf(stderr, "Yolo layer params: iou loss: %s, iou_normalizer: %f, cls_normalizer: %f\n", (l.iou_loss==MSE?"mse":(l.iou_loss==GIOU?"giou":"iou")), l.iou_normalizer, l.cls_normalizer);
+    fprintf(stderr, "Yolo layer params: iou loss: %s, iou_normalizer: %f, cls_normalizer: %f\n",(l.iou_loss==MSE?"mse":(l.iou_loss==expGIOU?"expGiou":(l.iou_loss==GIOU?"giou":"iou"))), l.iou_normalizer, l.cls_normalizer);
     l.max_boxes = option_find_int_quiet(options, "max",90);
     l.jitter = option_find_float(options, "jitter", .2);
 
